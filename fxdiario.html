@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FX Diário | Análises Forex em Tempo Real</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#F5A623;--dark:#0A0D14;--card:#111420;--border:#1E2235;--surf:#161924;--tp:#F0F2FF;--ts:#8892B0;--tm:#4A5568;--green:#00E5A0;--gdim:rgba(0,229,160,.1);--red:#FF4D6A;--rdim:rgba(255,77,106,.1);--blue:#4E9EFF;--pur:#7C6AF7}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--dark);color:var(--tp);line-height:1.6}
+/* TICKER */
+.tw{background:#0d1020;border-bottom:1px solid var(--border);padding:8px 0;overflow:hidden;position:sticky;top:0;z-index:100}
+.ti{display:flex;gap:36px;animation:tick 28s linear infinite;white-space:nowrap}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ti-item{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600}
+.tpair{color:var(--ts)}.tprice{color:var(--tp)}
+.up{color:var(--green)}.dn{color:var(--red)}
+/* HEADER */
+header{background:rgba(10,13,20,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 40px;position:sticky;top:33px;z-index:99}
+.hd{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--gold),#e8930a);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#000}
+.logo-txt{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:var(--tp)}
+.logo-txt span{color:var(--gold)}
+nav a{color:var(--ts);text-decoration:none;padding:8px 14px;border-radius:8px;font-size:14px;font-weight:500;transition:all .2s}
+nav a:hover,.active{background:var(--card)!important;color:var(--tp)!important}
+.ha{display:flex;gap:12px;align-items:center}
+.btn-o{padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--ts);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-o:hover{border-color:var(--gold);color:var(--gold)}
+.btn-g{padding:8px 20px;border-radius:8px;background:linear-gradient(135deg,var(--gold),#e8930a);color:#000;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-g:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(245,166,35,.4)}
+/* HERO */
+.hero{background:linear-gradient(135deg,#0A0D14 0%,#0d1525 50%,#0A0D14 100%);padding:60px 40px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-200px;left:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(245,166,35,.05),transparent 70%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(124,106,247,.06),transparent 70%);pointer-events:none}
+.hero-in{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);color:var(--gold);padding:5px 14px;border-radius:100px;font-size:12px;font-weight:600;letter-spacing:.5px;margin-bottom:18px}
+.dot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pd 1.5s infinite}
+@keyframes pd{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:46px;font-weight:800;line-height:1.1;margin-bottom:16px}
+.hero h1 span{color:var(--gold)}
+.hero-desc{color:var(--ts);font-size:16px;line-height:1.7;margin-bottom:28px}
+.hero-stats{display:flex;gap:32px}
+.hsn{font-size:24px;font-weight:800;color:var(--gold);font-family:'Space Grotesk',sans-serif}
+.hsl{font-size:11px;color:var(--tm);letter-spacing:.5px}
+/* HERO CARD */
+.hcard{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.hcard-img{height:180px;background:linear-gradient(135deg,#0d1525,#1a1040)}
+.hcard-body{padding:20px}
+.tag{display:inline-block;padding:3px 10px;border-radius:5px;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px}
+.t-s{background:rgba(0,229,160,.12);color:var(--green)}
+.t-a{background:rgba(78,158,255,.12);color:var(--blue)}
+.t-e{background:rgba(124,106,247,.12);color:var(--pur)}
+.t-p{background:rgba(245,166,35,.12);color:var(--gold)}
+.hcard-body h3{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;margin-bottom:8px;line-height:1.35}
+.pmeta{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--tm)}
+/* MAIN */
+.main{max-width:1200px;margin:0 auto;padding:48px 40px;display:grid;grid-template-columns:1fr 360px;gap:36px}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.st{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;display:flex;align-items:center;gap:10px}
+.sa{color:var(--gold);text-decoration:none;font-size:13px;font-weight:600;transition:gap .2s}
+.sa:hover{gap:8px}
+/* SETUP */
+.setup{background:linear-gradient(135deg,rgba(0,229,160,.05),var(--card));border:1px solid rgba(0,229,160,.2);border-radius:16px;padding:20px;margin-bottom:16px}
+.s-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.s-pair{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800}
+.s-dir{padding:5px 12px;border-radius:8px;font-size:12px;font-weight:800;letter-spacing:1px}
+.buy{background:var(--gdim);color:var(--green)}.sell{background:var(--rdim);color:var(--red)}
+.s-lvl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.lvl{background:var(--surf);border-radius:10px;padding:10px 12px;text-align:center;border:1px solid var(--border)}
+.lbl{font-size:10px;color:var(--tm);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
+.val{font-size:15px;font-weight:700;font-family:'Space Grotesk',sans-serif}
+.v-e{color:var(--gold)}.v-sl{color:var(--red)}.v-tp{color:var(--green)}
+.s-note{font-size:13px;color:var(--ts);line-height:1.6}
+/* POSTS */
+.pg{display:flex;flex-direction:column;gap:16px}
+.pc{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;transition:all .25s;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start}
+.pc:hover{border-color:rgba(245,166,35,.3);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
+.pc h3{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;margin:8px 0;line-height:1.4}
+.pc p{font-size:13px;color:var(--ts);line-height:1.6;margin-bottom:14px}
+.pf{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.pa{display:flex;align-items:center;gap:8px}
+.av{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#e8930a);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#000;flex-shrink:0}
+.an{font-size:12px;font-weight:600;color:var(--ts)}
+.pd,.pr{font-size:12px;color:var(--tm)}
+.sd{width:3px;height:3px;background:var(--tm);border-radius:50%;display:inline-block}
+.pt{width:90px;height:90px;border-radius:12px;background:var(--surf);border:1px solid var(--border);overflow:hidden;flex-shrink:0}
+/* SIDEBAR */
+.sb{display:flex;flex-direction:column;gap:24px}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px}
+.sc-t{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+/* AUTHOR */
+.auth{text-align:center;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px}
+.av-big{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#e8930a);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#000;margin:0 auto 12px;border:3px solid rgba(245,166,35,.3)}
+.auth h3{font-size:16px;font-weight:700;margin-bottom:4px}
+.a-role{font-size:12px;color:var(--gold);font-weight:600;margin-bottom:10px}
+.a-bio{font-size:13px;color:var(--ts);line-height:1.6;margin-bottom:16px}
+.slinks{display:flex;justify-content:center;gap:10px}
+.sl{width:36px;height:36px;border-radius:9px;background:var(--surf);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--ts);text-decoration:none;font-size:14px;transition:all .2s}
+.sl:hover{border-color:var(--gold);color:var(--gold)}
+/* MARKET */
+.mr{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.mr:last-child{border-bottom:none}
+.mp{font-size:14px;font-weight:700}
+.mv{font-size:14px;font-weight:600;color:var(--ts);font-family:'Space Grotesk',sans-serif}
+.mc{font-size:12px;font-weight:700;padding:2px 8px;border-radius:5px}
+.cu{color:var(--green);background:var(--gdim)}.cd{color:var(--red);background:var(--rdim)}
+/* CAL */
+.cg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cdh{font-size:10px;font-weight:700;color:var(--tm);text-align:center;padding:4px 0}
+.cd{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--ts);border-radius:7px;cursor:pointer;transition:all .15s}
+.cd:hover{background:var(--surf);color:var(--tp)}
+.has{background:rgba(245,166,35,.1);color:var(--tp)}
+.today{background:var(--gold);color:#000;font-weight:800}
+/* NEWSLETTER */
+.nl{background:linear-gradient(135deg,rgba(245,166,35,.08),rgba(124,106,247,.08));border:1px solid rgba(245,166,35,.2);border-radius:16px;padding:24px;text-align:center}
+.nl h3{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px}
+.nl p{font-size:13px;color:var(--ts);margin-bottom:16px;line-height:1.6}
+.ni{width:100%;padding:10px 14px;border-radius:8px;background:var(--dark);border:1px solid var(--border);color:var(--tp);font-size:13px;font-family:inherit;margin-bottom:10px;outline:none;transition:border-color .2s}
+.ni:focus{border-color:var(--gold)}.ni::placeholder{color:var(--tm)}
+.bs{width:100%;padding:11px;border-radius:8px;background:linear-gradient(135deg,var(--gold),#e8930a);color:#000;font-size:13px;font-weight:800;border:none;cursor:pointer;font-family:inherit}
+.bs:hover{box-shadow:0 4px 20px rgba(245,166,35,.4)}
+/* TAGS */
+.tc{display:flex;flex-wrap:wrap;gap:8px}
+.tch{padding:5px 12px;border-radius:8px;background:var(--surf);border:1px solid var(--border);color:var(--ts);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
+.tch:hover{border-color:var(--gold);color:var(--gold)}
+/* FOOTER */
+footer{background:var(--card);border-top:1px solid var(--border);padding:40px}
+.fi{max-width:1200px;margin:0 auto}
+.ft{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:36px}
+.fb p{font-size:13px;color:var(--tm);line-height:1.7;margin:12px 0 20px}
+.fc h4{font-size:13px;font-weight:700;margin-bottom:14px;letter-spacing:.5px}
+.fc a{display:block;color:var(--tm);text-decoration:none;font-size:13px;margin-bottom:8px;transition:color .2s}
+.fc a:hover{color:var(--gold)}
+.fbot{border-top:1px solid var(--border);padding-top:24px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--tm);flex-wrap:wrap;gap:10px}
+.fbot a{color:var(--tm);text-decoration:none}
+.disc{margin-bottom:24px;background:rgba(255,77,106,.05);border:1px solid rgba(255,77,106,.15);border-radius:10px;padding:12px 16px;font-size:11.5px;color:var(--tm);line-height:1.6}
+/* POPUP */
+.pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center}
+.pop.on{display:flex}
+.pbox{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px;max-width:420px;width:90%;text-align:center;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.pcls{position:absolute;top:14px;right:14px;background:var(--surf);border:1px solid var(--border);color:var(--ts);width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:16px;font-family:inherit}
+.pbox h2{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;margin-bottom:10px}
+.pbox p{font-size:14px;color:var(--ts);margin-bottom:20px;line-height:1.6}
+@media(max-width:900px){.hero-in{grid-template-columns:1fr}.hcard{display:none}.main{grid-template-columns:1fr;padding:24px 20px}.ft{grid-template-columns:1fr 1fr}header{padding:0 20px}.hero{padding:40px 20px}nav{display:none}}
+@media(max-width:500px){.ft{grid-template-columns:1fr}.hero h1{font-size:32px}}
+</style>
+</head>
+<body>
+
+<div class="tw"><div class="ti" id="tk"></div></div>
+
+<header>
+  <div class="hd">
+    <a href="#" class="logo">
+      <div class="logo-icon">FX</div>
+      <span class="logo-txt">FX<span>Diário</span></span>
+    </a>
+    <nav>
+      <a href="#" class="active">Início</a>
+      <a href="#">Análises</a>
+      <a href="#">Setups</a>
+      <a href="#">Educação</a>
+      <a href="#">Pensamentos</a>
+      <a href="#">Sobre</a>
+    </nav>
+    <div class="ha">
+      <button class="btn-o">🔔 Alertas</button>
+      <button class="btn-g">Premium ⚡</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-in">
+    <div>
+      <div class="badge"><span class="dot"></span>Análise ao vivo · 17 Fev 2026</div>
+      <h1>Mercado Forex<br><span>Sem Filtros.</span><br>Todo Dia.</h1>
+      <p class="hero-desc">Análises diárias de price action, setups operacionais e reflexões sobre o mercado. Tudo que você precisa para operar com consistência.</p>
+      <div class="hero-stats">
+        <div><div class="hsn">847</div><div class="hsl">POSTS</div></div>
+        <div><div class="hsn">12k+</div><div class="hsl">LEITORES</div></div>
+        <div><div class="hsn">3.2k</div><div class="hsl">SEGUIDORES</div></div>
+      </div>
+    </div>
+    <div class="hcard">
+      <div class="hcard-img">
+        <svg width="100%" height="180" viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="45" x2="320" y2="45" stroke="#1E2235" stroke-width="1"/>
+          <line x1="0" y1="90" x2="320" y2="90" stroke="#1E2235" stroke-width="1"/>
+          <line x1="0" y1="135" x2="320" y2="135" stroke="#1E2235" stroke-width="1"/>
+          <defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00E5A0"/><stop offset="100%" stop-color="transparent"/></linearGradient></defs>
+          <path d="M0,130 L40,110 L80,105 L120,80 L160,62 L200,45 L240,32 L280,22 L320,15 L320,180 L0,180Z" fill="url(#gg)" opacity="0.22"/>
+          <path d="M0,130 L40,110 L80,105 L120,80 L160,62 L200,45 L240,32 L280,22 L320,15" stroke="#00E5A0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="320" cy="15" r="5" fill="#00E5A0"/>
+          <circle cx="320" cy="15" r="10" fill="rgba(0,229,160,0.2)"/>
+          <text x="255" y="12" fill="#00E5A0" font-size="11" font-weight="bold" font-family="Inter">+1.42%</text>
+          <text x="8" y="172" fill="#4A5568" font-size="9" font-family="Inter">Seg</text><text x="65" y="172" fill="#4A5568" font-size="9" font-family="Inter">Ter</text>
+          <text x="120" y="172" fill="#4A5568" font-size="9" font-family="Inter">Qua</text><text x="175" y="172" fill="#4A5568" font-size="9" font-family="Inter">Qui</text>
+          <text x="230" y="172" fill="#4A5568" font-size="9" font-family="Inter">Sex</text><text x="295" y="172" fill="#4A5568" font-size="9" font-family="Inter">Hj</text>
+        </svg>
+      </div>
+      <div class="hcard-body">
+        <span class="tag t-s">Setup do Dia</span>
+        <h3>EUR/USD — Zona de demanda testada. Compra em pullback com alvo no 1.0920</h3>
+        <div class="pmeta">
+          <div class="av" style="width:22px;height:22px;font-size:10px">R</div>
+          <span>Rafael Mendes</span><span class="sd"></span><span>Hoje · 5 min</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="main">
+<main>
+  <div class="sh"><h2 class="st">⚡ Setup do Dia</h2><a href="#" class="sa">Ver todos →</a></div>
+  <div class="setup">
+    <div class="s-hd">
+      <div><div class="s-pair">EUR/USD</div><div style="font-size:12px;color:var(--tm);margin-top:2px">17 Fev 2026 · Atualizado 09:32</div></div>
+      <div class="s-dir buy">COMPRA</div>
+    </div>
+    <div class="s-lvl">
+      <div class="lvl"><div class="lbl">Entrada</div><div class="val v-e">1.0845</div></div>
+      <div class="lvl"><div class="lbl">Stop Loss</div><div class="val v-sl">1.0810</div></div>
+      <div class="lvl"><div class="lbl">Alvo</div><div class="val v-tp">1.0920</div></div>
+    </div>
+    <p class="s-note">📌 <strong>Contexto:</strong> Preço retornou à zona de demanda semanal no 1.0840–1.0850. Estrutura de mercado bullish no H4. Aguardando fechamento acima do 1.0855 no H1 para confirmar a entrada. RR de 2.1:1. Gestão de risco: máximo 1% do capital por operação.</p>
+  </div>
+
+  <div class="sh" style="margin-top:36px"><h2 class="st">📊 Análises Recentes</h2><a href="#" class="sa">Ver todas →</a></div>
+
+  <div class="pg">
+    <article class="pc">
+      <div>
+        <span class="tag t-a">Análise Técnica</span>
+        <h3>GBP/JPY enfrenta resistência no 188.50 — O que esperar desta semana?</h3>
+        <p>Após a forte alta de 340 pips na semana passada, o par encontrou pressão vendedora relevante. Analiso os níveis-chave e o possível cenário para os próximos dias.</p>
+        <div class="pf"><div class="pa"><div class="av">R</div><span class="an">Rafael Mendes</span></div><span class="sd"></span><span class="pd">17 Fev · 7 min</span><span class="pr">👁 1.2k</span></div>
+      </div>
+      <div class="pt"><svg width="90" height="90" viewBox="0 0 90 90" fill="none"><rect width="90" height="90" fill="#161924"/><path d="M5,70 L20,55 L35,60 L50,40 L65,35 L80,20" stroke="#FF4D6A" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="80" cy="20" r="3" fill="#FF4D6A"/><text x="5" y="85" fill="#4A5568" font-size="8" font-family="Inter">GBP/JPY</text></svg></div>
+    </article>
+
+    <article class="pc">
+      <div>
+        <span class="tag t-p">Pensamentos</span>
+        <h3>Por que 90% dos traders perdem dinheiro — e como sair desse grupo</h3>
+        <p>Não é falta de estratégia. É falta de processo. Compartilho as 3 mudanças de mentalidade que transformaram minha consistência no mercado.</p>
+        <div class="pf"><div class="pa"><div class="av">R</div><span class="an">Rafael Mendes</span></div><span class="sd"></span><span class="pd">16 Fev · 9 min</span><span class="pr">👁 3.4k</span></div>
+      </div>
+      <div class="pt"><svg width="90" height="90" viewBox="0 0 90 90" fill="none"><rect width="90" height="90" fill="#161924"/><text x="20" y="62" font-size="38">💡</text></svg></div>
+    </article>
+
+    <article class="pc">
+      <div>
+        <span class="tag t-s">Setup</span>
+        <h3>USD/CAD — Triângulo simétrico prestes a romper. Dois cenários operacionais</h3>
+        <p>O par consolida há 8 dias dentro de uma estrutura de triângulo no D1. Apresento os dois lados da operação com entradas, stops e alvos definidos.</p>
+        <div class="pf"><div class="pa"><div class="av">R</div><span class="an">Rafael Mendes</span></div><span class="sd"></span><span class="pd">15 Fev · 6 min</span><span class="pr">👁 987</span></div>
+      </div>
+      <div class="pt"><svg width="90" height="90" viewBox="0 0 90 90" fill="none"><rect width="90" height="90" fill="#161924"/><path d="M5,50 L20,40 L35,45 L50,30 L65,35 L80,25" stroke="#4E9EFF" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M5,50 L20,60 L35,55 L50,65 L65,55 L80,60" stroke="#FF4D6A" stroke-width="1.5" fill="none" stroke-dasharray="3,2"/><text x="5" y="85" fill="#4A5568" font-size="8" font-family="Inter">USD/CAD</text></svg></div>
+    </article>
+
+    <article class="pc">
+      <div>
+        <span class="tag t-e">Educação</span>
+        <h3>Como usar o DXY para filtrar entradas em pares com USD — guia prático</h3>
+        <p>Entender o índice do dólar americano é uma das ferramentas mais subestimadas. Explico como integrar o DXY na sua análise diária passo a passo.</p>
+        <div class="pf"><div class="pa"><div class="av">R</div><span class="an">Rafael Mendes</span></div><span class="sd"></span><span class="pd">14 Fev · 11 min</span><span class="pr">👁 2.1k</span></div>
+      </div>
+      <div class="pt"><svg width="90" height="90" viewBox="0 0 90 90" fill="none"><rect width="90" height="90" fill="#161924"/><text x="18" y="62" font-size="38">📚</text></svg></div>
+    </article>
+
+    <article class="pc">
+      <div>
+        <span class="tag t-a">Análise de Sessão</span>
+        <h3>Abertura de Londres: USD/JPY com força vendedora. Nível 150.00 como pivô</h3>
+        <p>A sessão europeia abriu com pressão compradora no JPY. O nível psicológico 150.00 definirá o viés do dia nos pares com iene.</p>
+        <div class="pf"><div class="pa"><div class="av">R</div><span class="an">Rafael Mendes</span></div><span class="sd"></span><span class="pd">13 Fev · 4 min</span><span class="pr">👁 654</span></div>
+      </div>
+      <div class="pt"><svg width="90" height="90" viewBox="0 0 90 90" fill="none"><rect width="90" height="90" fill="#161924"/><path d="M5,60 L25,50 L40,55 L55,35 L70,30 L80,40" stroke="#7C6AF7" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="80" cy="40" r="3" fill="#7C6AF7"/><text x="5" y="85" fill="#4A5568" font-size="8" font-family="Inter">USD/JPY</text></svg></div>
+    </article>
+  </div>
+
+  <div style="text-align:center;margin-top:28px">
+    <button class="btn-o" style="padding:12px 32px;font-size:14px">Carregar mais posts ↓</button>
+  </div>
+</main>
+
+<aside class="sb">
+  <div class="auth">
+    <div class="av-big">R</div>
+    <h3>Rafael Mendes</h3>
+    <div class="a-role">Trader &amp; Analista Forex · 8 anos</div>
+    <p class="a-bio">Analista independente focado em price action e fluxo de ordens. Opero o mercado diariamente e compartilho tudo aqui — sem filtros, sem vender sonhos.</p>
+    <div class="slinks"><a href="#" class="sl">𝕏</a><a href="#" class="sl">📸</a><a href="#" class="sl">▶</a><a href="#" class="sl">✈</a></div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-t">📈 Mercado Agora</div>
+    <div class="mr"><span class="mp">EUR/USD</span><span class="mv">1.0847</span><span class="mc cu">+0.31%</span></div>
+    <div class="mr"><span class="mp">GBP/USD</span><span class="mv">1.2593</span><span class="mc cu">+0.18%</span></div>
+    <div class="mr"><span class="mp">USD/JPY</span><span class="mv">149.82</span><span class="mc cd">−0.42%</span></div>
+    <div class="mr"><span class="mp">USD/CHF</span><span class="mv">0.8924</span><span class="mc cd">−0.09%</span></div>
+    <div class="mr"><span class="mp">AUD/USD</span><span class="mv">0.6341</span><span class="mc cu">+0.55%</span></div>
+    <div class="mr"><span class="mp">Gold (XAU)</span><span class="mv">2,891.40</span><span class="mc cu">+0.72%</span></div>
+    <div style="margin-top:12px;font-size:11px;color:var(--tm);text-align:center">Preços indicativos · 09:47 EST</div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-t">📅 Publicações</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <button style="background:none;border:none;color:var(--ts);cursor:pointer;font-size:18px;padding:0 4px">‹</button>
+      <span style="font-size:13px;font-weight:700">Fevereiro 2026</span>
+      <button style="background:none;border:none;color:var(--ts);cursor:pointer;font-size:18px;padding:0 4px">›</button>
+    </div>
+    <div class="cg">
+      <div class="cdh">D</div><div class="cdh">S</div><div class="cdh">T</div><div class="cdh">Q</div><div class="cdh">Q</div><div class="cdh">S</div><div class="cdh">S</div>
+      <div class="cd" style="visibility:hidden"></div><div class="cd" style="visibility:hidden"></div><div class="cd" style="visibility:hidden"></div><div class="cd" style="visibility:hidden"></div><div class="cd" style="visibility:hidden"></div><div class="cd" style="visibility:hidden"></div><div class="cd">1</div>
+      <div class="cd">2</div><div class="cd has">3</div><div class="cd has">4</div><div class="cd has">5</div><div class="cd has">6</div><div class="cd has">7</div><div class="cd">8</div>
+      <div class="cd">9</div><div class="cd has">10</div><div class="cd has">11</div><div class="cd has">12</div><div class="cd has">13</div><div class="cd has">14</div><div class="cd">15</div>
+      <div class="cd">16</div><div class="cd today">17</div><div class="cd">18</div><div class="cd">19</div><div class="cd">20</div><div class="cd">21</div><div class="cd">22</div>
+      <div class="cd">23</div><div class="cd">24</div><div class="cd">25</div><div class="cd">26</div><div class="cd">27</div><div class="cd">28</div>
+    </div>
+    <div style="margin-top:12px;display:flex;align-items:center;gap:8px">
+      <div style="width:10px;height:10px;border-radius:3px;background:rgba(245,166,35,.3);flex-shrink:0"></div>
+      <span style="font-size:11px;color:var(--tm)">= dias com publicação</span>
+    </div>
+  </div>
+
+  <div class="nl">
+    <div style="font-size:32px;margin-bottom:12px">📬</div>
+    <h3>Receba as análises</h3>
+    <p>Setups e análises direto no seu e-mail toda manhã, antes da abertura europeia.</p>
+    <input class="ni" type="email" placeholder="seu@email.com">
+    <button class="bs">Quero receber grátis →</button>
+    <div style="font-size:11px;color:var(--tm);margin-top:10px">Sem spam. Cancele quando quiser.</div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-t">🏷️ Categorias</div>
+    <div class="tc">
+      <span class="tch">EUR/USD</span><span class="tch">GBP/USD</span><span class="tch">USD/JPY</span>
+      <span class="tch">Price Action</span><span class="tch">Setup</span><span class="tch">Gestão de Risco</span>
+      <span class="tch">DXY</span><span class="tch">H4</span><span class="tch">Suporte/Resistência</span>
+      <span class="tch">Psicologia</span><span class="tch">NFP</span><span class="tch">Ouro</span>
+    </div>
+  </div>
+</aside>
+</div>
+
+<footer>
+  <div class="fi">
+    <div class="disc">⚠️ <strong>Aviso de Risco:</strong> O conteúdo publicado neste blog tem caráter exclusivamente educacional e informativo. Nada aqui constitui conselho financeiro ou recomendação de investimento. Operar no mercado Forex envolve riscos significativos. Consulte um profissional habilitado antes de tomar decisões financeiras.</div>
+    <div class="ft">
+      <div class="fb">
+        <div class="logo"><div class="logo-icon">FX</div><span class="logo-txt" style="margin-left:10px">FX<span>Diário</span></span></div>
+        <p>Análises diárias de Forex com foco em price action, fluxo de ordens e psicologia do trading. Conteúdo honesto, sem filtros.</p>
+        <div class="slinks" style="justify-content:flex-start"><a href="#" class="sl">𝕏</a><a href="#" class="sl">📸</a><a href="#" class="sl">▶</a><a href="#" class="sl">✈</a></div>
+      </div>
+      <div class="fc">
+        <h4>CONTEÚDO</h4>
+        <a href="#">Análises Diárias</a><a href="#">Setups da Semana</a><a href="#">Educação Forex</a><a href="#">Pensamentos</a><a href="#">Revisão Semanal</a>
+      </div>
+      <div class="fc">
+        <h4>RECURSOS</h4>
+        <a href="#">Calculadora de Lotes</a><a href="#">Calendário Econômico</a><a href="#">Sessões de Mercado</a><a href="#">Glossário Forex</a>
+      </div>
+      <div class="fc">
+        <h4>SOBRE</h4>
+        <a href="#">Quem sou eu</a><a href="#">Newsletter</a><a href="#">Contato</a><a href="#">Política de Privacidade</a>
+      </div>
+    </div>
+    <div class="fbot"><span>© 2026 FXDiário · Feito para traders brasileiros</span><a href="#">Política de privacidade</a></div>
+  </div>
+</footer>
+
+<div class="pop" id="ep">
+  <div class="pbox">
+    <button class="pcls" onclick="document.getElementById('ep').classList.remove('on')">✕</button>
+    <div style="font-size:40px;margin-bottom:12px">📊</div>
+    <h2>Não perca os setups de amanhã!</h2>
+    <p>Assine e receba a análise diária antes da abertura europeia — de graça, todo dia útil.</p>
+    <input class="ni" type="email" placeholder="seu@email.com" style="text-align:center">
+    <button class="bs">Quero receber grátis →</button>
+    <div style="font-size:12px;color:var(--tm);margin-top:12px;cursor:pointer" onclick="document.getElementById('ep').classList.remove('on')">Não, obrigado</div>
+  </div>
+</div>
+
+<script>
+const pairs=[
+  {p:'EUR/USD',v:'1.0847',c:'+0.31%',u:1},{p:'GBP/USD',v:'1.2593',c:'+0.18%',u:1},
+  {p:'USD/JPY',v:'149.82',c:'−0.42%',u:0},{p:'USD/CHF',v:'0.8924',c:'−0.09%',u:0},
+  {p:'AUD/USD',v:'0.6341',c:'+0.55%',u:1},{p:'NZD/USD',v:'0.5782',c:'+0.22%',u:1},
+  {p:'USD/CAD',v:'1.4103',c:'−0.14%',u:0},{p:'EUR/GBP',v:'0.8613',c:'+0.11%',u:1},
+  {p:'XAU/USD',v:'2,891.40',c:'+0.72%',u:1},{p:'DXY',v:'104.21',c:'−0.28%',u:0},
+  {p:'BTC/USD',v:'96,420',c:'+1.83%',u:1}
+];
+const tk=document.getElementById('tk');
+const html=pairs.map(x=>`<span class="ti-item"><span class="tpair">${x.p}</span><span class="tprice">${x.v}</span><span class="${x.u?'up':'dn'}">${x.c}</span></span>`).join('');
+tk.innerHTML=html+html;
+
+let shown=false;
+document.addEventListener('mouseleave',e=>{if(e.clientY<10&&!shown){shown=true;setTimeout(()=>document.getElementById('ep').classList.add('on'),400)}});
+document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',function(e){e.preventDefault();document.querySelectorAll('nav a').forEach(l=>l.classList.remove('active'));this.classList.add('active')}));
+</script>
+</body>
+</html>
