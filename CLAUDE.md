@@ -4,7 +4,7 @@
 
 FXdiario (FX Diário) is a **Forex trading blog and analysis platform** targeting Brazilian traders. The application is a single-file static website written in Portuguese (pt-BR) that provides daily forex market analysis, trading setups, educational content, and market data.
 
-**Author persona**: Rafael Mendes — independent forex analyst and trader (8 years experience).
+**Author persona**: Sérgio Batalha — independent forex analyst and trader (+20 years experience).
 
 ## Architecture
 
